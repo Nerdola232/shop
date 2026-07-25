@@ -1,5 +1,6 @@
 // ==========================================
 // FLUXO DE COMPRA (AVISO -> PAGAMENTO -> INFO EXTRA -> WEBHOOK -> LINK DO SERVIDOR)
+// ZERO TELA DE CARREGAMENTO AQUI
 // ==========================================
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
     try {
@@ -40,9 +41,10 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
         const opcaoExtra = prompt("Digite a sua informação adicional (ex: seu Nick no jogo ou ID para entrega):");
         if (!opcaoExtra) return;
 
+        // 4. URL do seu backend
         const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
 
-        // 4. Envia para o backend (Webhook do Discord)
+        // 5. Envia para o backend (Webhook do Discord)
         const resposta = await fetch(URL_DO_SERVIDOR, {
             method: "POST",
             headers: {
@@ -60,12 +62,13 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
         const resultado = await resposta.json();
 
         if (resposta.ok) {
-            const linkServidor = "https://discord.gg/SEU_LINK"; // Cole o link do seu Discord aqui
+            // COLOQUE O LINK DO SEU SERVIDOR DO DISCORD AQUI
+            const linkServidor = "https://discord.gg/SEU_LINK"; 
             
             const irParaServidor = confirm(
                 "✅ Pedido enviado com sucesso para a staff!\n\n" +
                 `Método: ${metodoStr}\n` +
-                `Info: ${opcaoExtra}\n\n" +
+                `Info: ${opcaoExtra}\n\n` +
                 "Clique em 'OK' para entrar no servidor do Discord e finalizar."
             );
 
