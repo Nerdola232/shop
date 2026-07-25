@@ -1,22 +1,43 @@
-// Remove o travamento da tela e oculta o loading assim que a página termina de carregar
-window.addEventListener('load', () => {
-    document.body.style.overflow = 'auto'; // Libera a rolagem da página
+// ==========================================
+// CONTROLE DA TELA DE CARREGAMENTO E ROLAGEM
+// ==========================================
+window.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
     const telaCarregamento = document.getElementById('loading-screen');
-    if (telaCarregamento) {
-        telaCarregamento.style.opacity = '0';
-        telaCarregamento.style.visibility = 'hidden';
-        setTimeout(() => {
-            telaCarregamento.style.display = 'none';
-        }, 500); // Espera a animação de fade sumir
+
+    function liberarInterface() {
+        // 1. Libera a rolagem do body perfeitamente
+        body.style.overflow = 'auto';
+        
+        // 2. Esconde a tela de carregamento com fade suave
+        if (telaCarregamento) {
+            telaCarregamento.style.opacity = '0';
+            telaCarregamento.style.visibility = 'hidden';
+            setTimeout(() => {
+                telaCarregamento.style.display = 'none';
+            }, 500);
+        }
     }
+
+    // Segurança de 8 segundos caso algo demore a carregar
+    const timerSeguranca = setTimeout(() => {
+        liberarInterface();
+    }, 8000);
+
+    // Libera assim que tudo carregar por completo
+    window.addEventListener('load', () => {
+        clearTimeout(timerSeguranca);
+        liberarInterface();
+    });
 });
 
-// Função principal de compra integrada ao seu servidor no Render
+
+// ==========================================
+// FUNÇÃO DE COMPRA (INTEGRADA AO RENDER)
+// ==========================================
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
-    // Link exato do seu servidor seguro no Render com a rota /comprar
     const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
 
-    // Validação básica antes de enviar
     if (!quantidadeDesejada || quantidadeDesejada <= 0) {
         alert("Por favor, selecione uma quantidade válida.");
         return;
