@@ -1,67 +1,40 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-// Tabela de preços trancada no servidor
-const produtos = {
-    "id_01": { nome: "Conta Roblox Básica", preco: 15.00 },
-    "id_02": { nome: "Conta Roblox Premium", preco: 50.00 },
-    "id_03": { nome: "Conta Roblox VIP", preco: 120.00 }
-};
-
-const ultimaTentativa = new Map();
-const COOLDOWN_SEGUNDOS = 3 * 1000;
-
 app.post('/comprar', async (req, res) => {
-    const ipCliente = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const agora = Date.now();
-
-    if (ultimaTentativa.has(ipCliente)) {
-        if (agora - ultimaTentativa.get(ipCliente) < COOLDOWN_SEGUNDOS) {
-            return res.status(429).json({ erro: "Calma aí! Aguarde 3 segundos." });
-        }
-    }
-    ultimaTentativa.set(ipCliente, agora);
-
-    // Recebe o item, a quantidade e o discord do cliente que o site mandou
-    const { itemId, quantidade, discordUser } = req.body;
-    const produtoReal = produtos[itemId];
-
-    if (!produtoReal || !quantidade || quantidade <= 0) {
-        return res.status(400).json({ erro: "Dados inválidos ou tentativa de fraude." });
-    }
-
-    const valorTotal = produtoReal.preco * quantidade;
-
-    // Webhooks separados que você vai configurar nas variáveis do Render
-    const webhookVendas = process.env.WEBHOOK_VENDAS; 
-
-    const mensagemDiscord = {
-        content: `🛒 **NOVA SOLICITAÇÃO DE COMPRA!** 🛒\n` +
-                 `👤 **Cliente (Discord):** ${discordUser || "Não informado"}\n` +
-                 `📦 **Produto:** ${produtoReal.nome}\n` +
-                 `🔢 **Quantidade:** ${quantidade}x\n` +
-                 `💰 **Preço Total:** R$ ${valorTotal.toFixed(2)}\n` +
-                 `*(Protegido e calculado pelo Servidor)*`
-    };
-
     try {
-        await fetch(webhookVendas, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const { itemId, quantidade, discordUser, formaPagamento, infoExtra } = req.body;
+
+        if (!itemId || !quantidade || !discordUser || !formaPagamento) {
+            return res.status(400).json({ erro: "Dados incompletos para a compra." });
+        }
+
+        const mensagemDiscord = {
+            embeds: [{
+                title: "🚨 NOVO PEDIDO DE COMPRA REALIZADO! 🚨",
+                color: 16711680,
+                fields: [
+                    { name: "👤 Cliente (Discord)", value: `\`${discordUser}\``, inline: false },
+                    { name: "📦 Item Desejado ID", value: `\`${itemId}\``, inline: true },
+                    { name: "🔢 Quantidade", value: `\`${quantidade}\``, inline: true },
+                    { name: "💳 Forma de Pagamento", value: `\`${formaPagamento}\``, inline: false },
+                    { name: "📝 Informação Adicional / Salva", value: `\`${infoExtra || "Nenhuma"}\``, inline: false },
+                    { name: "⚠️ TERMOS E AVISOS ACEITOS:", value: "• Cliente ciente de alterar senha e e-mail imediatamente.\n• Sem reembolso por arrependimento ou por 'não gostar da conta'.", inline: false }
+                ],
+                timestamp: new Date().toISOString()
+            }]
+        };
+
+        await fetch(WEBHOOK_DISCORD_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(mensagemDiscord)
         });
-        
-        res.json({ sucesso: true, mensagem: "Pedido enviado com segurança para a staff!" });
-    } catch (error) {
-        res.status(500).json({ erro: "Erro interno ao contatar o Discord." });
-    }
-});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+        return res.status(200).json({ 
+            sucesso: true, 
+            mensagem: "Pedido enviado com segurança para a staff!" 
+        });
+
+    } catch (erro) {
+        console.error("Erro no servidor:", erro);
+        return res.status(500).json({ erro: "Erro interno no servidor de pagamentos." });
+    }
 });
