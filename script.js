@@ -1,45 +1,72 @@
-async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
-    // 1. Mensagem de aviso de segurança
-    const termoAceito = confirm(
-        "⚠️ AVISO IMPORTANTE DE SEGURANÇA ⚠️\n\n" +
-        "• Assim que receber os dados, altere a SENHA e o E-MAIL imediatamente.\n" +
-        "• Grave a tela do processo para sua própria segurança.\n" +
-        "• NÃO realizamos reembolso caso você alegue 'que não gostou da conta'.\n\n" +
-        "Clique em 'OK' para concordar e prosseguir."
-    );
+// ==========================================
+// CONTROLE DA TELA DE CARREGAMENTO E ROLAGEM
+// ==========================================
+window.addEventListener('load', () => {
+    const telaCarregamento = document.getElementById('loading-screen');
+    
+    // Destrava a rolagem do celular/PC com segurança
+    document.documentElement.style.overflow = 'auto';
+    document.documentElement.style.height = 'auto';
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
 
-    if (!termoAceito) return;
-
-    // 2. Escolha do pagamento restrito e seguro
-    const pagamentoEscolhido = prompt(
-        "Escolha a forma de pagamento (digite o número):\n\n" +
-        "1 - Gift Card\n" +
-        "2 - Bitcoin\n" +
-        "3 - Outras moedas não rastreáveis"
-    );
-
-    if (!pagamentoEscolhido) return;
-
-    let metodoStr = "";
-    if (pagamentoEscolhido === "1") {
-        metodoStr = "Gift Card";
-    } else if (pagamentoEscolhido === "2") {
-        metodoStr = "Bitcoin";
-    } else if (pagamentoEscolhido === "3") {
-        metodoStr = "Outras moedas não rastreáveis";
-    } else {
-        alert("Opção inválida! Escolha 1, 2 ou 3.");
-        return;
+    if (telaCarregamento) {
+        telaCarregamento.style.opacity = '0';
+        telaCarregamento.style.visibility = 'hidden';
+        telaCarregamento.style.pointerEvents = 'none';
+        
+        setTimeout(() => {
+            telaCarregamento.style.display = 'none';
+        }, 300);
     }
+});
 
-    // 3. Nova opção extra salva (Ex: Nickname no jogo, ID ou contato)
-    const opcaoExtra = prompt("Digite a sua informação adicional (ex: seu Nick no jogo ou ID para entrega):");
-    if (!opcaoExtra) return;
 
-    const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
-
+// ==========================================
+// FLUXO DE COMPRA (AVISO -> PAGAMENTO -> INFO EXTRA -> WEBHOOK -> LINK DO SERVIDOR)
+// ==========================================
+async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
     try {
-        // 4. Envia tudo para o backend disparar no Webhook do Discord
+        // 1. Mensagem de aviso de segurança
+        const termoAceito = confirm(
+            "⚠️ AVISO IMPORTANTE DE SEGURANÇA ⚠️\n\n" +
+            "• Assim que receber os dados, altere a SENHA e o E-MAIL imediatamente.\n" +
+            "• Grave a tela do processo para sua própria segurança.\n" +
+            "• NÃO realizamos reembolso caso você alegue 'que não gostou da conta'.\n\n" +
+            "Clique em 'OK' para concordar e prosseguir."
+        );
+
+        if (!termoAceito) return;
+
+        // 2. Escolha do pagamento seguro
+        const pagamentoEscolhido = prompt(
+            "Escolha a forma de pagamento (digite o número):\n\n" +
+            "1 - Gift Card\n" +
+            "2 - Bitcoin\n" +
+            "3 - Outros"
+        );
+
+        if (!pagamentoEscolhido) return;
+
+        let metodoStr = "";
+        if (pagamentoEscolhido === "1") {
+            metodoStr = "Gift Card";
+        } else if (pagamentoEscolhido === "2") {
+            metodoStr = "Bitcoin";
+        } else if (pagamentoEscolhido === "3") {
+            metodoStr = "Outras";
+        } else {
+            alert("Opção inválida! Escolha 1, 2 ou 3.");
+            return;
+        }
+
+        // 3. Informação extra / Nickname
+        const opcaoExtra = prompt("Digite a sua informação adicional (ex: seu Nick no jogo ou ID para entrega):");
+        if (!opcaoExtra) return;
+
+        const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
+
+        // 4. Envia para o backend (Webhook do Discord)
         const resposta = await fetch(URL_DO_SERVIDOR, {
             method: "POST",
             headers: {
@@ -57,12 +84,12 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
         const resultado = await resposta.json();
 
         if (resposta.ok) {
-            const linkServidor = "https://discord.gg/SEU_LINK";
+            const linkServidor = "https://discord.gg/SEU_LINK"; // Cole o link do seu Discord aqui
             
             const irParaServidor = confirm(
                 "✅ Pedido enviado com sucesso para a staff!\n\n" +
                 `Método: ${metodoStr}\n` +
-                `Info salva: ${opcaoExtra}\n\n` +
+                `Info: ${opcaoExtra}\n\n" +
                 "Clique em 'OK' para entrar no servidor do Discord e finalizar."
             );
 
@@ -73,7 +100,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
             alert("Erro: " + (resultado.erro || "Não foi possível realizar a compra."));
         }
     } catch (erro) {
-        console.error("Erro de conexão:", erro);
+        console.error("Erro no processo de compra:", erro);
         alert("Erro ao conectar com o servidor de pagamentos.");
     }
 }
