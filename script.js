@@ -1,33 +1,9 @@
 // ==========================================
-// CONTROLE DA TELA DE CARREGAMENTO E ROLAGEM
-// ==========================================
-window.addEventListener('load', () => {
-    const telaCarregamento = document.getElementById('loading-screen');
-    
-    // Destrava a rolagem do celular/PC com segurança
-    document.documentElement.style.overflow = 'auto';
-    document.documentElement.style.height = 'auto';
-    document.body.style.overflow = 'auto';
-    document.body.style.height = 'auto';
-
-    if (telaCarregamento) {
-        telaCarregamento.style.opacity = '0';
-        telaCarregamento.style.visibility = 'hidden';
-        telaCarregamento.style.pointerEvents = 'none';
-        
-        setTimeout(() => {
-            telaCarregamento.style.display = 'none';
-        }, 300);
-    }
-});
-
-
-// ==========================================
-// FLUXO DE COMPRA (AVISO -> PAGAMENTO -> INFO EXTRA -> WEBHOOK -> LINK DO SERVIDOR)
+// FUNÇÃO DE COMPRA COM AVISO, PAGAMENTO, INFO EXTRA E WEBHOOK
 // ==========================================
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
     try {
-        // 1. Mensagem de aviso de segurança
+        // 1. Mensagem de aviso de segurança e termos
         const termoAceito = confirm(
             "⚠️ AVISO IMPORTANTE DE SEGURANÇA ⚠️\n\n" +
             "• Assim que receber os dados, altere a SENHA e o E-MAIL imediatamente.\n" +
@@ -54,7 +30,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
         } else if (pagamentoEscolhido === "2") {
             metodoStr = "Bitcoin";
         } else if (pagamentoEscolhido === "3") {
-            metodoStr = "Outras";
+            metodoStr = "Outros";
         } else {
             alert("Opção inválida! Escolha 1, 2 ou 3.");
             return;
@@ -89,7 +65,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
             const irParaServidor = confirm(
                 "✅ Pedido enviado com sucesso para a staff!\n\n" +
                 `Método: ${metodoStr}\n` +
-                `Info: ${opcaoExtra}\n\n" +
+                `Info: ${opcaoExtra}\n\n` +
                 "Clique em 'OK' para entrar no servidor do Discord e finalizar."
             );
 
