@@ -1,3 +1,9 @@
+/* TRAVAMENTO INICIAL DA TELA DE CARREGAMENTO */
+html, body.loading-ativo {
+    height: 100%;
+    overflow: hidden;
+}
+
 /* RESET & VARIÁVEIS GLOBAIS */
 * {
   box-sizing: border-box;
