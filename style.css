@@ -1,7 +1,10 @@
-/* TRAVAMENTO INICIAL DA TELA DE CARREGAMENTO */
-html, body.loading-ativo {
-    height: 100%;
-    overflow: hidden;
+/* CORREÇÃO DO SCROLL NO MOBILE */
+html, body {
+    width: 100%;
+    height: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* RESET & VARIÁVEIS GLOBAIS */
@@ -17,7 +20,6 @@ body {
   background-color: #0b0b1a;
   color: #e0e0ff;
   min-height: 100vh;
-  overflow-x: hidden;
   position: relative;
 }
 
