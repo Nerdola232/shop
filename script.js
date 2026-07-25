@@ -1,6 +1,6 @@
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
-    // COLE O LINK DO SEU RENDER AQUI EMBAIXO (Ex: https://astral-shop.onrender.com/comprar)
-    const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com";
+    // Link exato do seu servidor seguro no Render com a rota /comprar
+    const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
 
     try {
         const resposta = await fetch(URL_DO_SERVIDOR, {
