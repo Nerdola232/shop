@@ -1,9 +1,9 @@
 // ==========================================
-// FUNÇÃO DE COMPRA COM AVISO, PAGAMENTO, INFO EXTRA E WEBHOOK
+// FLUXO DE COMPRA (AVISO -> PAGAMENTO -> INFO EXTRA -> WEBHOOK -> LINK DO SERVIDOR)
 // ==========================================
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
     try {
-        // 1. Mensagem de aviso de segurança e termos
+        // 1. Mensagem de aviso de segurança
         const termoAceito = confirm(
             "⚠️ AVISO IMPORTANTE DE SEGURANÇA ⚠️\n\n" +
             "• Assim que receber os dados, altere a SENHA e o E-MAIL imediatamente.\n" +
@@ -19,7 +19,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
             "Escolha a forma de pagamento (digite o número):\n\n" +
             "1 - Gift Card\n" +
             "2 - Bitcoin\n" +
-            "3 - Outros"
+            "3 - Outras moedas não rastreáveis"
         );
 
         if (!pagamentoEscolhido) return;
@@ -30,7 +30,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
         } else if (pagamentoEscolhido === "2") {
             metodoStr = "Bitcoin";
         } else if (pagamentoEscolhido === "3") {
-            metodoStr = "Outros";
+            metodoStr = "Outras moedas não rastreáveis";
         } else {
             alert("Opção inválida! Escolha 1, 2 ou 3.");
             return;
@@ -65,7 +65,7 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
             const irParaServidor = confirm(
                 "✅ Pedido enviado com sucesso para a staff!\n\n" +
                 `Método: ${metodoStr}\n` +
-                `Info: ${opcaoExtra}\n\n` +
+                `Info: ${opcaoExtra}\n\n" +
                 "Clique em 'OK' para entrar no servidor do Discord e finalizar."
             );
 
