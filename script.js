@@ -1,40 +1,45 @@
-// ==========================================
-// CONTROLE DA TELA DE CARREGAMENTO E ROLAGEM
-// ==========================================
-window.addEventListener('load', () => {
-    const telaCarregamento = document.getElementById('loading-screen');
-    
-    // Força o desbloqueio total da rolagem no HTML e Body
-    document.documentElement.style.overflow = 'auto';
-    document.documentElement.style.height = 'auto';
-    document.body.style.overflow = 'auto';
-    document.body.style.height = 'auto';
-
-    // Se a tela de carregamento existir, remove ela do caminho
-    if (telaCarregamento) {
-        telaCarregamento.style.opacity = '0';
-        telaCarregamento.style.visibility = 'hidden';
-        telaCarregamento.style.pointerEvents = 'none'; // Impede que ela bloqueie toques na tela
-        
-        setTimeout(() => {
-            telaCarregamento.style.display = 'none';
-        }, 300);
-    }
-});
-
-
-// ==========================================
-// FUNÇÃO DE COMPRA (INTEGRADA AO RENDER)
-// ==========================================
 async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
-    const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
+    // 1. Mensagem de aviso de segurança
+    const termoAceito = confirm(
+        "⚠️ AVISO IMPORTANTE DE SEGURANÇA ⚠️\n\n" +
+        "• Assim que receber os dados, altere a SENHA e o E-MAIL imediatamente.\n" +
+        "• Grave a tela do processo para sua própria segurança.\n" +
+        "• NÃO realizamos reembolso caso você alegue 'que não gostou da conta'.\n\n" +
+        "Clique em 'OK' para concordar e prosseguir."
+    );
 
-    if (!quantidadeDesejada || quantidadeDesejada <= 0) {
-        alert("Por favor, selecione uma quantidade válida.");
+    if (!termoAceito) return;
+
+    // 2. Escolha do pagamento restrito e seguro
+    const pagamentoEscolhido = prompt(
+        "Escolha a forma de pagamento (digite o número):\n\n" +
+        "1 - Gift Card\n" +
+        "2 - Bitcoin\n" +
+        "3 - Outras moedas não rastreáveis"
+    );
+
+    if (!pagamentoEscolhido) return;
+
+    let metodoStr = "";
+    if (pagamentoEscolhido === "1") {
+        metodoStr = "Gift Card";
+    } else if (pagamentoEscolhido === "2") {
+        metodoStr = "Bitcoin";
+    } else if (pagamentoEscolhido === "3") {
+        metodoStr = "Outras moedas não rastreáveis";
+    } else {
+        alert("Opção inválida! Escolha 1, 2 ou 3.");
         return;
     }
 
+    // 3. Nova opção extra salva (Ex: Nickname no jogo, ID ou contato)
+    const opcaoExtra = prompt("Digite a sua informação adicional (ex: seu Nick no jogo ou ID para entrega):");
+    if (!opcaoExtra) return;
+
+    const URL_DO_SERVIDOR = "https://astral-shop-backend.onrender.com/comprar";
+
     try {
+        // 4. Envia tudo para o backend disparar no Webhook do Discord
         const resposta = await fetch(URL_DO_SERVIDOR, {
             method: "POST",
             headers: {
@@ -43,14 +48,27 @@ async function comprarItem(itemId, quantidadeDesejada, nomeDiscord) {
             body: JSON.stringify({
                 itemId: itemId,
                 quantidade: quantidadeDesejada,
-                discordUser: nomeDiscord
+                discordUser: nomeDiscord,
+                formaPagamento: metodoStr,
+                infoExtra: opcaoExtra
             })
         });
 
         const resultado = await resposta.json();
 
         if (resposta.ok) {
-            alert(resultado.mensagem || "Pedido enviado com segurança para a staff!");
+            const linkServidor = "https://discord.gg/SEU_LINK";
+            
+            const irParaServidor = confirm(
+                "✅ Pedido enviado com sucesso para a staff!\n\n" +
+                `Método: ${metodoStr}\n` +
+                `Info salva: ${opcaoExtra}\n\n` +
+                "Clique em 'OK' para entrar no servidor do Discord e finalizar."
+            );
+
+            if (irParaServidor) {
+                window.location.href = linkServidor;
+            }
         } else {
             alert("Erro: " + (resultado.erro || "Não foi possível realizar a compra."));
         }
