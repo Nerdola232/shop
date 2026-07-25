@@ -1,34 +1,22 @@
 // ==========================================
 // CONTROLE DA TELA DE CARREGAMENTO E ROLAGEM
 // ==========================================
-window.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
+window.addEventListener('load', () => {
     const telaCarregamento = document.getElementById('loading-screen');
+    
+    // Força a liberação da rolagem no HTML e Body diretamente
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+    document.body.style.height = 'auto';
 
-    function liberarInterface() {
-        // 1. Libera a rolagem do body perfeitamente
-        body.style.overflow = 'auto';
-        
-        // 2. Esconde a tela de carregamento com fade suave
-        if (telaCarregamento) {
-            telaCarregamento.style.opacity = '0';
-            telaCarregamento.style.visibility = 'hidden';
-            setTimeout(() => {
-                telaCarregamento.style.display = 'none';
-            }, 500);
-        }
+    // Esconde a tela de carregamento
+    if (telaCarregamento) {
+        telaCarregamento.style.opacity = '0';
+        telaCarregamento.style.visibility = 'hidden';
+        setTimeout(() => {
+            telaCarregamento.style.display = 'none';
+        }, 500);
     }
-
-    // Segurança de 8 segundos caso algo demore a carregar
-    const timerSeguranca = setTimeout(() => {
-        liberarInterface();
-    }, 8000);
-
-    // Libera assim que tudo carregar por completo
-    window.addEventListener('load', () => {
-        clearTimeout(timerSeguranca);
-        liberarInterface();
-    });
 });
 
 
