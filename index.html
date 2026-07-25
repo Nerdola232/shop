@@ -1,286 +1,63 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Astral Shop - Roblox Accounts</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astral Shop</title>
+    <!-- Se você tiver um arquivo de CSS, ele vai puxar daqui -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos básicos para garantir que o menu apareça */
+        body {
+            background-color: #0b0b1a; /* Cor de fundo escura (Astral) */
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .produto {
+            background-color: #1a1a2e;
+            border: 1px solid #e2b714;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        button {
+            background-color: #e2b714;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #cda411;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- TELA DE CARREGAMENTO -->
-  <div id="loading-screen">
-    <div class="loader-content">
-      <svg class="star-loader-svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
-      </svg>
-      <p class="loading-text" data-i18n="loading">Carregando Astral Shop...</p>
-    </div>
-  </div>
+    <header>
+        <h1>Astral Shop</h1>
+    </header>
 
-  <!-- CANVAS DO FUNDO DE ESTRELAS E METEOROS -->
-  <canvas id="stars-canvas"></canvas>
-
-  <!-- CABEÇALHO -->
-  <header>
-    <div class="logo" id="logoAdminTrigger" title="Astral Shop">
-      <svg class="logo-star-icon" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
-      </svg>
-      Astral Shop
-    </div>
-
-    <div class="header-right">
-      <!-- SELETOR DE IDIOMA (IN-BOX) -->
-      <div class="lang-box-container">
-        <span class="lang-icon">🌐</span>
-        <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-          <option value="pt" selected>🇧🇷 PT-BR</option>
-          <option value="en">🇺🇸 English</option>
-          <option value="es">🇪🇸 Español</option>
-        </select>
-      </div>
-
-      <nav>
-        <a href="#catalogo" data-i18n="nav_catalog">Catálogo</a>
-        <a href="#faq" data-i18n="nav_faq">FAQ</a>
-        <a href="#termos" data-i18n="nav_terms">Termos</a>
-        <a href="https://discord.gg/sburgN8Ubu" target="_blank" class="discord-nav-btn">
-          <svg width="18" height="18" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.68 1.76 1.36 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.91-72.14zM42.45 65.69c-6.22 0-11.33-5.71-11.33-12.73s5-12.72 11.33-12.72c6.38 0 11.45 5.76 11.33 12.72 0 7.02-4.95 12.73-11.33 12.73zm42.24 0c-6.22 0-11.33-5.71-11.33-12.73s5-12.72 11.33-12.72c6.38 0 11.45 5.76 11.33 12.72 0 7.02-4.95 12.73-11.33 12.73z"/></svg>
-          <span data-i18n="nav_discord">Nosso Discord</span>
-        </a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- CONTEÚDO PRINCIPAL -->
-  <div class="container">
-    <section class="hero">
-      <h1>Astral Shop</h1>
-      <p data-i18n="hero_sub">Venda exclusiva de contas Roblox com entrega instantânea e segurança total.</p>
-    </section>
-
-    <!-- ESTATÍSTICAS DA LOJA -->
-    <div class="stats-container">
-      <div class="stat-box">
-        <span class="stat-number">★ 5.0</span>
-        <span class="stat-label" data-i18n="stat_reviews">Avaliações</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number">48+</span>
-        <span class="stat-label" data-i18n="stat_sold">Contas Vendidas</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number">12+</span>
-        <span class="stat-label" data-i18n="stat_clients">Clientes Totais</span>
-      </div>
-    </div>
-
-    <!-- CONTROLES -->
-    <div class="controls-panel">
-      <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Pesquisar tipo de conta..." onkeyup="filterProducts()" data-i18n-placeholder="search_placeholder" />
-      <div class="categories">
-        <button class="cat-btn active" onclick="filterCategory('all', this)" data-i18n="cat_all">Todas</button>
-        <button class="cat-btn" onclick="filterCategory('1-7dias', this)" data-i18n="cat_1_7">1-7 Dias</button>
-        <button class="cat-btn" onclick="filterCategory('7plusdias', this)" data-i18n="cat_7plus">7+ Dias</button>
-        <button class="cat-btn" onclick="filterCategory('og', this)" data-i18n="cat_og">OG (2015 e Antes)</button>
-        <button class="cat-btn" onclick="filterCategory('premium', this)" data-i18n="cat_premium">Premium</button>
-        <button class="cat-btn" onclick="filterCategory('40plusdias', this)" data-i18n="cat_40plus">40+ Dias</button>
-        <button class="cat-btn" onclick="filterCategory('100plusdias', this)" data-i18n="cat_100plus">100+ Dias</button>
-      </div>
-    </div>
-
-    <!-- CATÁLOGO DE PRODUTOS -->
-    <h2 class="section-title" id="catalogo" data-i18n="title_catalog">Contas Disponíveis</h2>
-    <div class="grid" id="productGrid">
-
-      <div class="card" id="product-1" data-category="1-7dias" data-title="Conta Roblox Recente 1-7 Dias">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+1-7+Dias" class="product-img" alt="Conta" />
+    <main>
+        <div id="menu-produtos">
+            <!-- Seu item para vender -->
+            <div class="produto">
+                <h2>Conta / Item</h2>
+                <p>Descrição do que você está vendendo aqui.</p>
+                <!-- Botão que aciona o script de compra -->
+                <button onclick="comprarItem('item_01', 1, 'Cliente')">Comprar Agora</button>
+            </div>
         </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_1_7">1-7 Dias</span>
-          <h3 class="prod-title" data-i18n="p1_title">Conta Roblox (1 a 7 Dias)</h3>
-          <p data-i18n="p1_desc">Conta recém-criada, limpa e ideal para novos inícios ou suporte.</p>
-        </div>
-        <div>
-          <div class="price">R$ 5,00</div>
-          <button class="btn" onclick="openCheckout('product-1')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
+    </main>
 
-      <div class="card" id="product-2" data-category="7plusdias" data-title="Conta Roblox Maturada 7+ Dias">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+7%2B+Dias" class="product-img" alt="Conta" />
-        </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_7plus">7+ Dias</span>
-          <h3 class="prod-title" data-i18n="p2_title">Conta Roblox (7+ Dias)</h3>
-          <p data-i18n="p2_desc">Conta maturada com mais de uma semana de criação sem restrições.</p>
-        </div>
-        <div>
-          <div class="price">R$ 10,00</div>
-          <button class="btn" onclick="openCheckout('product-2')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
-
-      <div class="card" id="product-3" data-category="og" data-title="Conta OG Roblox 2015 ou Anterior">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+OG+2015" class="product-img" alt="Conta" />
-        </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_og">OG (2015 e Antes)</span>
-          <h3 class="prod-title" data-i18n="p3_title">Conta OG Rara (2015 e Antes)</h3>
-          <p data-i18n="p3_desc">Conta antiga criada em 2015 ou anterior, com badges e avatares raros.</p>
-        </div>
-        <div>
-          <div class="price">R$ 60,00</div>
-          <button class="btn" onclick="openCheckout('product-3')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
-
-      <div class="card" id="product-4" data-category="premium" data-title="Conta Roblox Premium Com Robux">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+Premium" class="product-img" alt="Conta" />
-        </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_premium">Premium</span>
-          <h3 class="prod-title" data-i18n="p4_title">Conta Roblox Premium</h3>
-          <p data-i18n="p4_desc">Acompanha assinatura ativa, itens de catálogo pagos e inventário valorizado.</p>
-        </div>
-        <div>
-          <div class="price">R$ 45,00</div>
-          <button class="btn" onclick="openCheckout('product-4')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
-
-      <div class="card" id="product-5" data-category="40plusdias" data-title="Conta Roblox Maturada 40+ Dias">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+40%2B+Dias" class="product-img" alt="Conta" />
-        </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_40plus">40+ Dias</span>
-          <h3 class="prod-title" data-i18n="p5_title">Conta Roblox (40+ Dias)</h3>
-          <p data-i18n="p5_desc">Conta segura com mais de 40 dias de existência, pronta para jogos competitivos.</p>
-        </div>
-        <div>
-          <div class="price">R$ 20,00</div>
-          <button class="btn" onclick="openCheckout('product-5')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
-
-      <div class="card" id="product-6" data-category="100plusdias" data-title="Conta Roblox Maturada 100+ Dias">
-        <div class="card-image-container">
-          <img src="https://via.placeholder.com/300x160/151530/a855f7?text=Roblox+100%2B+Dias" class="product-img" alt="Conta" />
-        </div>
-        <div>
-          <span class="card-badge" data-i18n="badge_100plus">100+ Dias</span>
-          <h3 class="prod-title" data-i18n="p6_title">Conta Roblox (100+ Dias)</h3>
-          <p data-i18n="p6_desc">Conta super antiquada e maturada com mais de 100 dias sem histórico de punições.</p>
-        </div>
-        <div>
-          <div class="price">R$ 30,00</div>
-          <button class="btn" onclick="openCheckout('product-6')" data-i18n="btn_buy">Comprar Agora</button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- SEÇÃO FAQ -->
-    <h2 class="section-title" id="faq" data-i18n="title_faq">Perguntas Frequentes (FAQ)</h2>
-    <div class="content-block">
-      <div class="faq-item">
-        <div class="faq-question" data-i18n="faq_q1">❓ Como recebo a conta após o pagamento?</div>
-        <div class="faq-answer" data-i18n="faq_a1">Você receberá o login e senha diretamente no seu contato ou via Discord assim que o pagamento for verificado.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" data-i18n="faq_q2">⚡ Qual o tempo de entrega?</div>
-        <div class="faq-answer" data-i18n="faq_a2">A maioria das contas possui entrega imediata ou em no máximo 15 minutos.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" data-i18n="faq_q3">🛡️ Como funciona a política de Reembolso e Garantia?</div>
-        <div class="faq-answer" data-i18n="faq_a3">O reembolso ou troca só será efetuado <strong>obrigatoriamente se o cliente gravar um vídeo contínuo (sem cortes)</strong> mostrando todo o passo a passo feito durante o recebimento da conta, a tentativa de login e a troca de senha. Caso não haja gravação completa, o reembolso não será aceito.</div>
-      </div>
-    </div>
-
-    <!-- SEÇÃO TERMOS -->
-    <h2 class="section-title" id="termos" data-i18n="title_terms">Termos de Uso</h2>
-    <div class="content-block terms-text">
-      <p data-i18n="term_1"><strong>1. Responsabilidade:</strong> Após o envio dos dados, o comprador deve imediatamente alterar e-mail e senha da conta.</p>
-      <p data-i18n="term_2"><strong>2. Suporte:</strong> Dúvidas adicionais devem ser retiradas diretamente através do nosso servidor oficial no Discord.</p>
-      <p data-i18n="term_3"><strong>3. Regra Rigorosa de Reembolso:</strong> O Reembolso só é válido mediante gravação em vídeo sem cortes de todo o processo realizado desde o recebimento do produto até a troca final da senha. Sem a gravação integral provando eventual problema, nenhuma solicitação de reembolso será aceita.</p>
-    </div>
-  </div>
-
-  <!-- MODAL DE CHECKOUT -->
-  <div class="modal-overlay" id="checkoutModal">
-    <div class="modal">
-      <span class="modal-close" onclick="closeCheckout()">&times;</span>
-      <h2 data-i18n="modal_checkout_title">Finalizar Pedido</h2>
-      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 0.8rem;">
-        <span data-i18n="modal_product_label">Produto:</span> <strong id="modalProductName" style="color: #38bdf8;">-</strong><br>
-        <span data-i18n="modal_price_label">Valor:</span> <strong id="modalProductPrice" style="color: #a855f7;">-</strong>
-      </p>
-
-      <div class="refund-warning" data-i18n="modal_refund_warning">
-        ⚠️ <strong>Atenção:</strong> Grave um vídeo sem cortes de todo o processo de login e troca de senha! Reembolsos só são aceitos com essa gravação.
-      </div>
-
-      <form id="checkoutForm" onsubmit="submitOrder(event)">
-        <div class="form-group">
-          <label for="clientName" data-i18n="label_name">Seu Nome / User:</label>
-          <input type="text" id="clientName" required placeholder="Ex: Player123" />
-        </div>
-        <div class="form-group">
-          <label for="clientDiscord" data-i18n="label_discord">Seu Discord:</label>
-          <input type="text" id="clientDiscord" required placeholder="Ex: astral_user" />
-        </div>
-        <button type="submit" class="btn" data-i18n="btn_confirm">Confirmar Pedido</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL DE LOGIN ADMIN (2FA DISCORD) -->
-  <div class="modal-overlay" id="adminAuthModal">
-    <div class="modal">
-      <span class="modal-close" onclick="closeAdminAuth()">&times;</span>
-      <h2>🔐 Acesso Restrito Admin</h2>
-      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1rem;">
-        Solicite o código de 6 dígitos via Webhook do Discord. O código é **válido por 30 segundos**.
-      </p>
-
-      <div style="margin-bottom: 1rem; text-align: center;">
-        <button class="btn" style="background: #5865f2;" onclick="requestDiscord2FACode()">📩 Gerar & Enviar Código no Discord</button>
-      </div>
-
-      <div class="form-group">
-        <label for="admin2FACode">Código de Autenticação (30s):</label>
-        <input type="text" id="admin2FACode" maxlength="6" placeholder="Ex: 849201" style="text-align: center; letter-spacing: 4px; font-size: 1.2rem;" />
-      </div>
-
-      <p id="timerDisplay" style="color: #ef4444; font-weight: bold; text-align: center; font-size: 0.9rem; min-height: 20px;"></p>
-
-      <button class="btn" onclick="verifyAdminCode()">Acessar Dashboard</button>
-    </div>
-  </div>
-
-  <!-- DASHBOARD ADMIN -->
-  <div class="modal-overlay" id="adminDashboardModal">
-    <div class="modal admin-dash-modal">
-      <span class="modal-close" onclick="closeAdminDashboard()">&times;</span>
-      <h2>⚙️ Painel de Controle Admin</h2>
-      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">
-        Sessão ativa. Edite títulos, preços e URLs de imagem diretamente abaixo.
-      </p>
-
-      <div id="adminProductList" class="admin-product-list"></div>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2026 Astral Shop. <span data-i18n="footer_rights">Todos os direitos reservados.</span></p>
-  </footer>
-
-  <script src="script.js"></script>
+    <!-- Puxa o seu arquivo script.js -->
+    <script src="script.js"></script>
 </body>
 </html>
