@@ -4,18 +4,21 @@
 window.addEventListener('load', () => {
     const telaCarregamento = document.getElementById('loading-screen');
     
-    // Força a liberação da rolagem no HTML e Body diretamente
+    // Força o desbloqueio total da rolagem no HTML e Body
     document.documentElement.style.overflow = 'auto';
+    document.documentElement.style.height = 'auto';
     document.body.style.overflow = 'auto';
     document.body.style.height = 'auto';
 
-    // Esconde a tela de carregamento
+    // Se a tela de carregamento existir, remove ela do caminho
     if (telaCarregamento) {
         telaCarregamento.style.opacity = '0';
         telaCarregamento.style.visibility = 'hidden';
+        telaCarregamento.style.pointerEvents = 'none'; // Impede que ela bloqueie toques na tela
+        
         setTimeout(() => {
             telaCarregamento.style.display = 'none';
-        }, 500);
+        }, 300);
     }
 });
 
